@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { directusClient, type Locale } from '../../lib/directus';
+
+export async function getStaticPaths() {
+  const locales: Locale[] = ['nl', 'fr', 'de', 'it', 'es', 'zh', 'ja'];
+  const allPaths = await Promise.all(
+    locales.map(async (lang) => {
+      const pages = await directusClient.getAllPages(lang);
+      return pages.map(page => ({
+        params: { lang, slug: page.slug },
+        props: { page, lang }
+      }));
+    })
+  );
+  return allPaths.flat();
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayout title={page.title} description={page.meta_description}>
+  {page.eyebrow && <p class="eyebrow">{page.eyebrow}</p>}
+  <h1>{page.heading || page.title}</h1>
+  {page.tag_line && <p class="tag-line">{page.tag_line}</p>}
+  {page.body && <div class="content" set:html={page.body} />}
+</BaseLayout>
+
+<style>
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.875rem;
+    opacity: 0.6;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 300;
+    margin: 2rem 0;
+  }
+  .tag-line {
+    font-size: 1.25rem;
+    opacity: 0.8;
+    margin-bottom: 2rem;
+  }
+  .content {
+    max-width: 65ch;
+    line-height: 1.8;
+  }
+</style>

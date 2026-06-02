@@ -1,0 +1,181 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { directusClient } from '../lib/directus';
+
+const page = await directusClient.getPage('press', 'en');
+---
+
+<BaseLayout title="Press" description="Press and media resources for Minerva Holding B.V.">
+  <section class="press-page">
+    <div class="press-header">
+      <h1>Press Room</h1>
+      <p class="tagline">Resources for media and press inquiries</p>
+    </div>
+
+    <div class="press-content">
+      {page?.body ? (
+        <div class="content" set:html={page.body} />
+      ) : (
+        <>
+          <div class="press-section">
+            <h2>Media Inquiries</h2>
+            <p>
+              For press inquiries, interview requests, or additional information,
+              please contact our communications team:
+            </p>
+            <p>
+              <strong>Email:</strong> <a href="mailto:press@minerva-holding.com">press@minerva-holding.com</a><br />
+              <strong>Phone:</strong> +31 (0) XX XXX XXXX
+            </p>
+          </div>
+
+          <div class="press-section">
+            <h2>Press Releases</h2>
+            <div class="press-releases">
+              <article class="press-release">
+                <time>2027</time>
+                <h3>Minerva Aegis: The Future of Protection</h3>
+                <p>Announcing our revolutionary new model line...</p>
+                <a href="/aegis">Learn more</a>
+              </article>
+              <article class="press-release">
+                <time>2027</time>
+                <h3>Minerva Sovereign: Redefining Power</h3>
+                <p>Introducing the pinnacle of automotive engineering...</p>
+                <a href="/sovereign">Learn more</a>
+              </article>
+              <article class="press-release">
+                <time>2026</time>
+                <h3>Strategic Partnership Announcement</h3>
+                <p>Minerva Holding enters new strategic partnerships...</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="press-section">
+            <h2>Brand Assets</h2>
+            <p>
+              Official logos, product photography, and brand guidelines are available
+              upon request. Please contact <a href="mailto:press@minerva-holding.com">press@minerva-holding.com</a>
+              with your requirements.
+            </p>
+          </div>
+
+          <div class="press-section">
+            <h2>Subscribe to Press Updates</h2>
+            <p>Receive our latest press releases and announcements.</p>
+            <form class="subscribe-form" action="/api/subscribe" method="POST">
+              <input type="email" name="email" placeholder="Your email address" required />
+              <button type="submit">Subscribe</button>
+            </form>
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .press-page {
+    padding: 4rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .press-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .press-header h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 300;
+  }
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.8;
+    margin-top: 1rem;
+  }
+  .press-section {
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .press-section:last-child {
+    border-bottom: none;
+  }
+  .press-section h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+  }
+  .press-section p {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+  .press-section a {
+    text-decoration: underline;
+  }
+  .press-releases {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .press-release {
+    padding: 1.5rem;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .press-release time {
+    font-size: 0.875rem;
+    opacity: 0.6;
+  }
+  .press-release h3 {
+    font-size: 1.125rem;
+    font-weight: 400;
+    margin: 0.5rem 0;
+  }
+  .press-release p {
+    font-size: 0.9375rem;
+    opacity: 0.8;
+    margin-bottom: 0.75rem;
+  }
+  .press-release a {
+    font-size: 0.875rem;
+  }
+  .subscribe-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .subscribe-form input {
+    flex: 1;
+    padding: 0.75rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: inherit;
+    font-size: 1rem;
+  }
+  .subscribe-form input:focus {
+    outline: none;
+    border-color: rgba(255,255,255,0.4);
+  }
+  .subscribe-form button {
+    padding: 0.75rem 1.5rem;
+    background: #fff;
+    color: #000;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+  .subscribe-form button:hover {
+    opacity: 0.9;
+  }
+  .content :global(h2) {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 2rem 0 1rem;
+  }
+  .content :global(p) {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+  }
+</style>

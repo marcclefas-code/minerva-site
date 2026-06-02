@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { directusClient } from '../lib/directus';
+
+const vacancies = await directusClient.getTeamVacancies('en');
+---
+
+<BaseLayout title="Careers" description="Join the Minerva Holding team">
+  <section class="team-page">
+    <div class="team-header">
+      <h1>Join Our Team</h1>
+      <p class="tagline">Be part of something extraordinary</p>
+    </div>
+
+    <div class="vacancies-grid">
+      {vacancies.length > 0 ? (
+        vacancies.map((vacancy) => (
+          <article class="vacancy-card">
+            <div class="vacancy-meta">
+              <span class="department">{vacancy.department}</span>
+              <span class="location">{vacancy.location}</span>
+              <span class="type">{vacancy.type}</span>
+            </div>
+            <h2>{vacancy.title}</h2>
+            <p class="description">{vacancy.description}</p>
+            <div class="requirements">
+              <h3>Requirements</h3>
+              <p>{vacancy.requirements}</p>
+            </div>
+            <a href={`mailto:hr@minerva-holding.com?subject=Application: ${vacancy.title}`} class="apply-btn">
+              Apply Now
+            </a>
+          </article>
+        ))
+      ) : (
+        <div class="no-vacancies">
+          <p>No open positions at the moment.</p>
+          <p>Send your CV to <a href="mailto:hr@minerva-holding.com">hr@minerva-holding.com</a></p>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .team-page {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .team-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .team-header h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 300;
+  }
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.8;
+    margin-top: 1rem;
+  }
+  .vacancies-grid {
+    display: grid;
+    gap: 2rem;
+  }
+  .vacancy-card {
+    padding: 2rem;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .vacancy-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+  .vacancy-meta span {
+    padding: 0.25rem 0.75rem;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .vacancy-card h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+  .description {
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+  .requirements {
+    margin-bottom: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .requirements h3 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+  }
+  .apply-btn {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: #fff;
+    color: #000;
+    text-decoration: none;
+    transition: opacity 0.3s;
+  }
+  .apply-btn:hover {
+    opacity: 0.9;
+  }
+  .no-vacancies {
+    text-align: center;
+    padding: 4rem;
+    opacity: 0.8;
+  }
+  .no-vacancies a {
+    text-decoration: underline;
+  }
+</style>

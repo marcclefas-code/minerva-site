@@ -1,0 +1,33 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import GdprBanner from '../components/GdprBanner.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Minerva Holding B.V. - Luxury Automotive' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/assets/minerva.css" />
+    <title>{title} | Minerva Holding B.V.</title>
+  </head>
+  <body>
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <GdprBanner />
+    <script is:inline src="/assets/minerva.js"></script>
+  </body>
+</html>

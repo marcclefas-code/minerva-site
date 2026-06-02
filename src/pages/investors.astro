@@ -1,0 +1,172 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { directusClient } from '../lib/directus';
+
+const page = await directusClient.getPage('investors', 'en');
+---
+
+<BaseLayout title="Investors" description="Investor relations at Minerva Holding B.V.">
+  <section class="investors-page">
+    <div class="investors-header">
+      <h1>Investor Relations</h1>
+      <p class="tagline">Partnering for the future of mobility</p>
+    </div>
+
+    <div class="investors-content">
+      {page?.body ? (
+        <div class="content" set:html={page.body} />
+      ) : (
+        <>
+          <div class="investor-section">
+            <h2>Investment Thesis</h2>
+            <p>
+              Minerva Holding B.V. represents a unique opportunity to participate in the
+              next chapter of luxury automotive excellence. Our focus on innovation,
+              sustainability, and uncompromising quality positions us uniquely in the market.
+            </p>
+          </div>
+
+          <div class="investor-section">
+            <h2>Key Highlights</h2>
+            <ul>
+              <li>Proprietary technology in luxury electric mobility</li>
+              <li>Strong brand heritage dating back to 1897</li>
+              <li>Expanding global dealer network</li>
+              <li>Commitment to sustainable manufacturing</li>
+            </ul>
+          </div>
+
+          <div class="investor-section">
+            <h2>Contact</h2>
+            <p>
+              For investor inquiries, please contact:<br />
+              <a href="mailto:investor@minerva-holding.com">investor@minerva-holding.com</a>
+            </p>
+          </div>
+
+          <div class="investor-section">
+            <h2>Register Interest</h2>
+            <p>
+              Stay informed about our developments and future investment opportunities.
+            </p>
+            <form class="interest-form" action="/api/register" method="POST">
+              <input type="hidden" name="interest" value="investor" />
+              <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required />
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required />
+              </div>
+              <div class="form-group">
+                <label for="company">Company (Optional)</label>
+                <input type="text" id="company" name="company" />
+              </div>
+              <button type="submit" class="btn-submit">Register Interest</button>
+            </form>
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .investors-page {
+    padding: 4rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .investors-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .investors-header h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 300;
+  }
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.8;
+    margin-top: 1rem;
+  }
+  .investors-content {
+    line-height: 1.8;
+  }
+  .investor-section {
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .investor-section:last-child {
+    border-bottom: none;
+  }
+  .investor-section h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+  }
+  .investor-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  .investor-section li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+  .investor-section li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    opacity: 0.5;
+  }
+  .investor-section a {
+    text-decoration: underline;
+  }
+  .interest-form {
+    margin-top: 1.5rem;
+  }
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  .form-group label {
+    display: block;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: inherit;
+    font-size: 1rem;
+  }
+  .form-group input:focus {
+    outline: none;
+    border-color: rgba(255,255,255,0.4);
+  }
+  .btn-submit {
+    padding: 0.75rem 2rem;
+    background: #fff;
+    color: #000;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+  .btn-submit:hover {
+    opacity: 0.9;
+  }
+  .content :global(h2) {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 2rem 0 1rem;
+  }
+  .content :global(p) {
+    margin-bottom: 1rem;
+  }
+</style>

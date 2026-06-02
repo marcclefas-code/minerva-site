@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { directusClient } from '../lib/directus';
+import GalleryImage from '../components/GalleryImage.astro';
+
+const page = await directusClient.getPage('about', 'en');
+---
+
+<BaseLayout title={page?.title || 'About'} description={page?.meta_description || 'About Minerva Holding B.V.'}>
+  <section class="about-page">
+    <div class="about-header">
+      <h1>{page?.heading || page?.title || 'About Minerva'}</h1>
+      {page?.tag_line && <p class="tagline">{page.tag_line}</p>}
+    </div>
+
+    <div class="about-content">
+      {page?.body ? (
+        <div class="content" set:html={page.body} />
+      ) : (
+        <div class="content-placeholder">
+          <p>
+            Minerva Holding B.V. is a Dutch luxury automotive company with a heritage
+            dating back to 1897. Our name has become synonymous with uncompromising
+            quality, innovative design, and exceptional performance.
+          </p>
+          <p>
+            Based in the Netherlands, we embody the finest traditions of European
+            craftsmanship while embracing the technologies of tomorrow. Our vehicles
+            are designed for those who demand nothing but the best.
+          </p>
+        </div>
+      )}
+    </div>
+
+    <div class="about-gallery">
+      <GalleryImage pageSlug="about" altKey="portrait-1" fallback="/uploads/picture1.jpg" />
+      <GalleryImage pageSlug="about" altKey="portrait-2" fallback="/uploads/picture2.jpg" />
+      <GalleryImage pageSlug="about" altKey="portrait-3" fallback="/uploads/picture3.jpg" />
+      <GalleryImage pageSlug="about" altKey="portrait-4" fallback="/uploads/picture4.jpg" />
+    </div>
+
+    <div class="about-values">
+      <div class="value">
+        <h3>Heritage</h3>
+        <p>Over a century of automotive excellence, building vehicles for those who appreciate the finest things in life.</p>
+      </div>
+      <div class="value">
+        <h3>Innovation</h3>
+        <p>Constantly pushing the boundaries of what's possible in design, engineering, and sustainable mobility.</p>
+      </div>
+      <div class="value">
+        <h3>Quality</h3>
+        <p>Uncompromising attention to detail and craftsmanship in every vehicle we produce.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-page {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .about-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .about-header h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 300;
+  }
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.8;
+    margin-top: 1rem;
+  }
+  .about-content {
+    max-width: 800px;
+    margin: 0 auto 4rem;
+    text-align: center;
+  }
+  .about-content p {
+    font-size: 1.125rem;
+    line-height: 1.9;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+  .about-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+  .about-gallery :global(img) {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter 0.5s ease;
+  }
+  .about-gallery :global(img:hover) {
+    filter: grayscale(0%);
+  }
+  .about-values {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding-top: 4rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .value {
+    text-align: center;
+    padding: 2rem;
+  }
+  .value h3 {
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .value p {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    opacity: 0.8;
+  }
+  .content :global(h2) {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 2rem 0 1rem;
+  }
+  .content :global(p) {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+</style>

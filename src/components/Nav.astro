@@ -1,0 +1,55 @@
+---
+import { directusClient } from '../lib/directus';
+
+const settings = await directusClient.getSiteSettings('en');
+
+const navItems = [
+  { label: settings?.nav_about || 'About', href: '/about' },
+  { label: settings?.nav_history || 'History', href: '/history' },
+  { label: settings?.nav_aegis || 'Aegis', href: '/aegis' },
+  { label: settings?.nav_sovereign || 'Sovereign', href: '/sovereign' },
+  { label: settings?.nav_news || 'News', href: '/news' },
+];
+---
+
+<header class="site-header">
+  <a href="/" class="logo">
+    <img src="/uploads/minerva-logo-black.png" alt="Minerva" />
+  </a>
+  <button class="menu-toggle" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <nav class="main-nav">
+    {navItems.map(item => (
+      <a href={item.href}>{item.label}</a>
+    ))}
+    <a href="/login" class="nav-login">Login</a>
+  </nav>
+  <div class="language-switcher">
+    <select id="lang-select">
+      <option value="en">EN</option>
+      <option value="nl">NL</option>
+      <option value="fr">FR</option>
+      <option value="de">DE</option>
+      <option value="it">IT</option>
+      <option value="es">ES</option>
+      <option value="zh">ZH</option>
+      <option value="ja">JA</option>
+    </select>
+  </div>
+</header>
+
+<script>
+  const select = document.getElementById('lang-select');
+  select?.addEventListener('change', (e) => {
+    const lang = (e.target as HTMLSelectElement).value;
+    const currentPath = window.location.pathname;
+    if (lang === 'en') {
+      window.location.href = currentPath;
+    } else {
+      window.location.href = `/${lang}${currentPath}`;
+    }
+  });
+</script>

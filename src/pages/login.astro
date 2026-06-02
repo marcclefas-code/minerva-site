@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Login">
+  <section class="login-page">
+    <div class="login-container">
+      <h1>Login</h1>
+      <form class="login-form" action="/api/login" method="POST">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit" class="btn-submit">Sign In</button>
+      </form>
+      <p class="login-footer">
+        <a href="/privacy">Forgot your password?</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .login-container {
+    width: 100%;
+    max-width: 400px;
+  }
+  h1 {
+    font-size: 2rem;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  label {
+    display: block;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+  }
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: inherit;
+    font-size: 1rem;
+  }
+  input:focus {
+    outline: none;
+    border-color: rgba(255,255,255,0.3);
+  }
+  .btn-submit {
+    width: 100%;
+    padding: 0.75rem;
+    background: #fff;
+    color: #000;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+  .btn-submit:hover {
+    opacity: 0.9;
+  }
+  .login-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+  }
+  .login-footer a {
+    opacity: 0.7;
+  }
+</style>

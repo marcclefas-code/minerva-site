@@ -1,0 +1,87 @@
+---
+interface Props {
+  targetDate: string;
+}
+
+const { targetDate } = Astro.props;
+---
+
+<div class="countdown-timer" data-target={targetDate}>
+  <div class="countdown-unit">
+    <span class="days">00</span>
+    <span class="label">Days</span>
+  </div>
+  <div class="countdown-unit">
+    <span class="hours">00</span>
+    <span class="label">Hours</span>
+  </div>
+  <div class="countdown-unit">
+    <span class="minutes">00</span>
+    <span class="label">Minutes</span>
+  </div>
+  <div class="countdown-unit">
+    <span class="seconds">00</span>
+    <span class="label">Seconds</span>
+  </div>
+</div>
+
+<script>
+  class CountdownTimer extends HTMLElement {
+    constructor() {
+      super();
+      const target = this.dataset.target;
+      if (!target) return;
+
+      const targetTime = new Date(target).getTime();
+
+      const update = () => {
+        const now = Date.now();
+        const diff = targetTime - now;
+
+        if (diff <= 0) {
+          this.innerHTML = '<p>Reveal Now</p>';
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        this.querySelector('.days').textContent = String(days).padStart(2, '0');
+        this.querySelector('.hours').textContent = String(hours).padStart(2, '0');
+        this.querySelector('.minutes').textContent = String(minutes).padStart(2, '0');
+        this.querySelector('.seconds').textContent = String(seconds).padStart(2, '0');
+      };
+
+      update();
+      setInterval(update, 1000);
+    }
+  }
+
+  customElements.define('countdown-timer', CountdownTimer);
+</script>
+
+<style>
+  .countdown-timer {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    font-family: var(--font-display, serif);
+  }
+  .countdown-unit {
+    text-align: center;
+  }
+  .countdown-unit span:first-child {
+    font-size: 3rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+  .countdown-unit .label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-top: 0.5rem;
+  }
+</style>

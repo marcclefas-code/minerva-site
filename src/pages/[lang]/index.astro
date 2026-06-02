@@ -1,16 +1,33 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { directusClient } from '../lib/directus';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
-const page = await directusClient.getPage('home', 'en');
-const settings = await directusClient.getSiteSettings('en');
+export function getStaticPaths() {
+  const locales = ['nl', 'fr', 'de', 'it', 'es', 'zh', 'ja'];
+  return locales.map(lang => ({
+    params: { lang }
+  }));
+}
+
+const { lang } = Astro.params;
+
+const langNames: Record<string, string> = {
+  nl: 'Nederlands',
+  fr: 'Français',
+  de: 'Deutsch',
+  it: 'Italiano',
+  es: 'Español',
+  zh: '中文',
+  ja: '日本語',
+};
+
+const langName = langNames[lang] || lang;
 ---
 
-<BaseLayout title="Home" description={page?.meta_description || 'Minerva Holding B.V. - Redefining Luxury Automotive'}>
+<BaseLayout title={`Home - ${langName}`}>
   <section class="hero">
     <div class="hero-content">
       <h1 class="motto">Nulla Mea Credere</h1>
-      <p class="tagline">{page?.tag_line || 'Redefining the Art of Luxury Mobility'}</p>
+      <p class="tagline">Redefining the Art of Luxury Mobility</p>
     </div>
     <div class="hero-image">
       <img src="/uploads/minervabike.jpg" alt="Minerva Luxury Vehicle" />
@@ -21,12 +38,12 @@ const settings = await directusClient.getSiteSettings('en');
     <div class="teaser-card">
       <h2>Aegis</h2>
       <p>Coming Soon</p>
-      <a href="/aegis" class="btn">Learn More</a>
+      <a href={`/${lang}/aegis`} class="btn">Learn More</a>
     </div>
     <div class="teaser-card">
       <h2>Sovereign</h2>
       <p>Coming Soon</p>
-      <a href="/sovereign" class="btn">Learn More</a>
+      <a href={`/${lang}/sovereign`} class="btn">Learn More</a>
     </div>
   </section>
 </BaseLayout>

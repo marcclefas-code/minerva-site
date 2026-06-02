@@ -1,0 +1,67 @@
+---
+---
+
+<div id="gdpr-banner" class="gdpr-banner" style="display: none;">
+  <p>We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.
+    <a href="/privacy">Learn more</a>
+  </p>
+  <div class="gdpr-actions">
+    <button id="gdpr-accept">Accept</button>
+    <button id="gdpr-reject">Reject</button>
+  </div>
+</div>
+
+<script>
+  const banner = document.getElementById('gdpr-banner');
+  const acceptBtn = document.getElementById('gdpr-accept');
+  const rejectBtn = document.getElementById('gdpr-reject');
+
+  function getConsent() {
+    return document.cookie.match(/gdprConsent=(\w+)/)?.[1];
+  }
+
+  function setConsent(accepted) {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() + 1);
+    document.cookie = `gdprConsent=${accepted ? 'accepted' : 'rejected'}; expires=${date.toUTCString()}; path=/`;
+    banner.style.display = 'none';
+  }
+
+  if (!getConsent()) {
+    banner.style.display = 'block';
+  }
+
+  acceptBtn?.addEventListener('click', () => {
+    setConsent(true);
+    fetch('/api/consent', { method: 'POST', body: JSON.stringify({ accepted: true }) });
+  });
+
+  rejectBtn?.addEventListener('click', () => {
+    setConsent(false);
+    fetch('/api/consent', { method: 'POST', body: JSON.stringify({ accepted: false }) });
+  });
+</script>
+
+<style>
+  .gdpr-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #1a1a1a;
+    color: #fff;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+  }
+  .gdpr-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .gdpr-actions button {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+</style>

@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { directusClient } from '../lib/directus';
+import GalleryImage from '../components/GalleryImage.astro';
+
+const images = await directusClient.getGalleryImages('archives');
+---
+
+<BaseLayout title="Archives" description="Minerva Holding historical archives">
+  <section class="archives-page">
+    <div class="archives-header">
+      <h1>Archives</h1>
+      <p class="tagline">A glimpse into our heritage</p>
+    </div>
+
+    <div class="gallery-grid">
+      {images.length > 0 ? (
+        images.map((img) => (
+          <figure class="gallery-item">
+            <img
+              src={`${directus.url}/assets/${img.image}?width=800&format=webp`}
+              alt={img.alt_key}
+              loading="lazy"
+            />
+            <figcaption>{img.alt_key}</figcaption>
+          </figure>
+        ))
+      ) : (
+        <div class="gallery-placeholder">
+          <div class="placeholder-grid">
+            <div class="placeholder-item">
+              <img src="/uploads/picture1.jpg" alt="Archival photo 1" loading="lazy" />
+            </div>
+            <div class="placeholder-item">
+              <img src="/uploads/picture2.jpg" alt="Archival photo 2" loading="lazy" />
+            </div>
+            <div class="placeholder-item">
+              <img src="/uploads/picture3.jpg" alt="Archival photo 3" loading="lazy" />
+            </div>
+            <div class="placeholder-item">
+              <img src="/uploads/picture4.jpg" alt="Archival photo 4" loading="lazy" />
+            </div>
+            <div class="placeholder-item">
+              <img src="/uploads/minervabw1.jpg" alt="Archival photo 5" loading="lazy" />
+            </div>
+            <div class="placeholder-item">
+              <img src="/uploads/minervabw1-001c1c1e.jpg" alt="Archival photo 6" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .archives-page {
+    padding: 4rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .archives-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .archives-header h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 300;
+  }
+  .tagline {
+    font-size: 1.25rem;
+    opacity: 0.8;
+    margin-top: 1rem;
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+  .gallery-item {
+    margin: 0;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+  }
+  .gallery-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .gallery-item:hover img {
+    transform: scale(1.05);
+  }
+  .gallery-item figcaption {
+    padding: 1rem;
+    font-size: 0.875rem;
+    opacity: 0.7;
+    text-align: center;
+    background: rgba(0,0,0,0.3);
+  }
+  .placeholder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+  .placeholder-item {
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+  }
+  .placeholder-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+    filter: grayscale(100%);
+  }
+  .placeholder-item:hover img {
+    transform: scale(1.05);
+    filter: grayscale(50%);
+  }
+</style>

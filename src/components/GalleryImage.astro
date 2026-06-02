@@ -1,0 +1,46 @@
+---
+import { directusClient } from '../lib/directus';
+
+interface Props {
+  pageSlug: string;
+  altKey?: string;
+  fallback?: string;
+  class?: string;
+}
+
+const { pageSlug, altKey, fallback, class: className } = Astro.props;
+
+interface GalleryImage {
+  id: number;
+  image: string;
+  alt_key: string;
+}
+
+let imageUrl = fallback;
+let alt = altKey || '';
+
+try {
+  const images = await directusClient.getGalleryImages(pageSlug);
+  const img = altKey
+    ? images.find((i: GalleryImage) => i.alt_key === altKey)
+    : images[0];
+
+  if (img?.image) {
+    imageUrl = `${directus.url}/assets/${img.image}?width=1200&format=webp`;
+    alt = img.alt_key || alt;
+  }
+} catch {
+  // Use fallback
+}
+---
+
+{imageUrl && (
+  <img
+    src={imageUrl}
+    alt={alt}
+    class={className}
+    loading="lazy"
+    width="1200"
+    height="800"
+  />
+)}
