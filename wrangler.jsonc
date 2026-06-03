@@ -1,10 +1,8 @@
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "minerva-site",
   "compatibility_date": "2024-01-01",
   "pages": {
-    "build_output_dir": "dist"
-  },
-  "vars": {
-    "DIRECTUS_URL": "https://directus.yourdomain.com"
+    "source": "dist"
   }
 }
