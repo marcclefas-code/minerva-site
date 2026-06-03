@@ -1,7 +1,0 @@
-{
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "minerva-site",
-  "compatibility_date": "2024-01-01",
-  "account_id": "b9ea20435b7f9f1433b8c2e547eb74d6",
-  "pages_build_output_dir": "dist"
-}
